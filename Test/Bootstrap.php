@@ -2,28 +2,23 @@
 
 declare(strict_types=1);
 
-function getProjectDir(): string
-{
-    if (isset($_SERVER['PROJECT_ROOT']) && file_exists($_SERVER['PROJECT_ROOT'])) {
-        return $_SERVER['PROJECT_ROOT'];
-    }
-    if (isset($_ENV['PROJECT_ROOT']) && file_exists($_ENV['PROJECT_ROOT'])) {
-        return $_ENV['PROJECT_ROOT'];
-    }
-
-    $dir = $rootDir = __DIR__;
-    while (!file_exists($dir . '/.env')) {
-        if ($dir === \dirname($dir)) {
-            return $rootDir;
-        }
-
-        $dir = \dirname($dir);
-    }
-
-    return $dir;
+if (isset($_SERVER['PROJECT_ROOT']) && file_exists($_SERVER['PROJECT_ROOT'])) {
+    return $_SERVER['PROJECT_ROOT'];
+}
+if (isset($_ENV['PROJECT_ROOT']) && file_exists($_ENV['PROJECT_ROOT'])) {
+    return $_ENV['PROJECT_ROOT'];
 }
 
-define('TEST_PROJECT_DIR', getProjectDir());
+$dir = $rootDir = __DIR__;
+while (!file_exists($dir . '/.env')) {
+    if ($dir === \dirname($dir)) {
+        return $rootDir;
+    }
+
+    $dir = \dirname($dir);
+}
+
+define('TEST_PROJECT_DIR', $dir);
 
 require_once TEST_PROJECT_DIR . '/vendor/autoload.php';
 

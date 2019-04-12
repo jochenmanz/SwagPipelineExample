@@ -1,6 +1,6 @@
 <?php
 
-namespace PayonePayment\Test;
+namespace SwagPipelineExample\Test;
 
 use Shopware\Core\Framework\Context;
 use Shopware\Core\Framework\DataAbstractionLayer\EntityRepositoryInterface;
@@ -12,14 +12,19 @@ class BasicTest extends KernelTestCase
 {
     use IntegrationTestBehaviour;
 
+    /** @var EntityRepositoryInterface */
+    private $productRepository;
+
+    protected function setUp(): void
+    {
+        $this->productRepository = $this->getContainer()->get('product.repository');
+    }
+
     public function testItWorks()
     {
-        /** @var EntityRepositoryInterface $productRepository */
-        $productRepository = $this->getKernel()->getContainer()->get('product.repository');
-
         $context = Context::createDefaultContext();
 
-        $product = $productRepository->search(new Criteria(), $context)->first();
+        $product = $this->productRepository->search(new Criteria(), $context)->first();
 
         $this->assertNotEmpty($product);
     }
